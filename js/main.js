@@ -42,8 +42,8 @@ const cats = [
     img: "images/kitten7.jpeg"
   },
   {
-    name: "Kot",
-    bio: "Kot is a Russian word.",
+    name: "Brad",
+    bio: "Brad is a Russian word.",
     thumb: "images/kitten8-thumb.jpeg",
     img: "images/kitten8.jpeg"
   }
@@ -100,16 +100,6 @@ function openModal(){
 /*-------------------------
   Week 11 - Local Storage
 ---------------------------*/
-
-const likeButtons = document.querySelectorAll(".like")
-
-// check if we have any like buttons in the array
-if (likeButtons.length > 0) {
-  for (const likeButton of likeButtons) {
-    likeButton.addEventListener("click", likeCat)
-  }
-}
-
  //make sure to use let when use localStorage
  let savedCats = localStorage.getItem("mycats")
 
@@ -122,6 +112,22 @@ if (likeButtons.length > 0) {
    //else savedCats is set then parse it to convert to the array
    savedCats = JSON.parse(savedCats)
  }
+
+const likeButtons = document.querySelectorAll(".like")
+
+// check if we have any like buttons in the array
+if (likeButtons.length > 0) {
+  for (const likeButton of likeButtons) {
+    likeButton.addEventListener("click", likeCat)
+    for (savedCat of savedCats) {
+      if (likeButton.dataset.catname == savedCat.name) {
+        likeButton.classList.remove("btn-light")
+        likeButton.classList.add("btn-danger")
+        likeButton.textContent = "Liked"
+      }
+    }
+  }
+}
 
 function likeCat(e) {
   e.preventDefault()
@@ -138,7 +144,16 @@ function likeCat(e) {
   if(catExist !== null){
     alert(`You already liked ${catName}`)
   } else {
+    // else the catExist is null
+    // We push the catInfo to the savedCats array
     savedCats.push(catInfo)
+
+    //We now save the saveCats to localStorage
+    localStorage.setItem("mycats", JSON.stringify(savedCats))
+
+    this.classList.remove("btn-light")
+    this.classList.add("btn-danger")
+    this.textContent = "liked"
   }
 }
 
